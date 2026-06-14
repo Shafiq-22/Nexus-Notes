@@ -1,0 +1,12 @@
+{
+  "name": "Tasks",
+  "columns": [
+    { "key": "status", "type": "select", "options": ["todo", "doing", "done"] },
+    { "key": "priority", "type": "number" },
+    { "key": "due", "type": "date" }
+  ],
+  "views": [
+    { "type": "table", "name": "All Tasks" },
+    { "type": "kanban", "name": "Board", "groupBy": "status" }
+  ]
+}

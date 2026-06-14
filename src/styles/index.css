@@ -1,0 +1,229 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Light theme (default) */
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f7f7f8;
+    --bg-tertiary: #efeff1;
+    --bg-hover: #eceaf6;
+    --bg-active: #e2ddf7;
+    --border: #e6e6ea;
+    --border-strong: #d4d4da;
+    --text-normal: #1f2024;
+    --text-muted: #5c5f6b;
+    --text-faint: #9498a3;
+    --text-accent: #6d5cff;
+    --accent: #6d5cff;
+    --accent-hover: #5b49f0;
+    --danger: #e5484d;
+    --success: #30a46c;
+    --warning: #e2a336;
+  }
+
+  /* Dark theme */
+  [data-theme="dark"] {
+    --bg-primary: #16161a;
+    --bg-secondary: #1c1c21;
+    --bg-tertiary: #24242b;
+    --bg-hover: #2a2933;
+    --bg-active: #332f4d;
+    --border: #2a2a31;
+    --border-strong: #3a3a44;
+    --text-normal: #e6e6ea;
+    --text-muted: #a0a0ad;
+    --text-faint: #6b6b78;
+    --text-accent: #a99bff;
+    --accent: #7d6bff;
+    --accent-hover: #9385ff;
+    --danger: #ff6369;
+    --success: #4cc38a;
+    --warning: #f0c000;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-normal);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 6px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  .icon-btn {
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-md text-text-muted
+      transition-colors hover:bg-bg-hover hover:text-text-normal;
+  }
+  .side-row {
+    @apply flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-[5px] text-sm
+      text-text-muted transition-colors hover:bg-bg-hover hover:text-text-normal;
+  }
+  .side-row-active {
+    @apply bg-bg-active text-text-normal;
+  }
+  .tab {
+    @apply cursor-pointer rounded-md px-2.5 py-1 text-xs font-medium text-text-muted
+      transition-colors hover:text-text-normal;
+  }
+  .tab-active {
+    @apply bg-bg-tertiary text-text-normal;
+  }
+  .chip {
+    @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium;
+  }
+}
+
+/* Tiptap editor / prose */
+.tiptap {
+  outline: none;
+  color: var(--text-normal);
+  line-height: 1.7;
+  font-size: 16px;
+}
+.tiptap > * + * {
+  margin-top: 0.75em;
+}
+.tiptap h1 {
+  font-size: 1.9em;
+  font-weight: 700;
+  margin-top: 1.2em;
+}
+.tiptap h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 1em;
+}
+.tiptap h3 {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+.tiptap ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+.tiptap ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+.tiptap blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1em;
+  color: var(--text-muted);
+}
+.tiptap pre {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85em 1em;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.88em;
+  overflow-x: auto;
+}
+.tiptap code {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.88em;
+}
+.tiptap pre code {
+  background: none;
+  padding: 0;
+}
+.tiptap a {
+  color: var(--text-accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.tiptap ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0.2em;
+}
+.tiptap ul[data-type="taskList"] li {
+  display: flex;
+  gap: 0.5em;
+  align-items: flex-start;
+}
+.tiptap table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.tiptap th,
+.tiptap td {
+  border: 1px solid var(--border-strong);
+  padding: 6px 10px;
+  text-align: left;
+}
+.tiptap th {
+  background: var(--bg-tertiary);
+}
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--text-faint);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Wikilink decoration */
+.wikilink {
+  color: var(--text-accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 4px;
+  padding: 0 3px;
+  cursor: pointer;
+}
+.wikilink:hover {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* Slash command popup */
+.slash-menu {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  padding: 4px;
+  min-width: 220px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 50;
+}
+.slash-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.slash-item[aria-selected="true"] {
+  background: var(--bg-active);
+  color: var(--text-normal);
+}

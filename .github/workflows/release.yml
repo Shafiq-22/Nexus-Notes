@@ -1,0 +1,57 @@
+name: Release
+
+# Tag a version (e.g. `git tag v0.1.0 && git push --tags`) to build installers
+# for all platforms and attach them to a draft GitHub release.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { platform: macos-latest, args: "--target aarch64-apple-darwin" } # Apple Silicon .dmg
+          - { platform: macos-latest, args: "--target x86_64-apple-darwin" } # Intel .dmg
+          - { platform: ubuntu-22.04, args: "" } # .AppImage + .deb
+          - { platform: windows-latest, args: "" } # .msi + .exe (NSIS)
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install Linux dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev \
+            libayatana-appindicator3-dev libxdo-dev build-essential
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build & bundle (tauri-action)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "Nexus Notes ${{ github.ref_name }}"
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}

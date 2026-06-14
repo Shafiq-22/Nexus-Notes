@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+dist-ssr/
+*.local
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/
+
+# Editor / OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+*.log
+
+# Test vault used during local dev
+/sandbox-vault/
+
+# Derived per-vault index (rebuildable); never commit it
+.nexus/
+
+# Generated source icon scratch
+/app-icon.png
